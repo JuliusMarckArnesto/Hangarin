@@ -30,9 +30,10 @@
         <tbody>
             {% for task in tasks %}
             <tr>
+                
                 <td><strong>{{ task.title }}</strong></td>
                 <td>
-                    <span class="badge badge-{{ task.priority.priority_level|lower }}">
+                    <span class="badge badge-priority priority-{{ task.priority.priority_level|lower }}">
                         {{ task.priority.priority_level }}
                     </span>
                 </td>
