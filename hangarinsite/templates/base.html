@@ -1,0 +1,180 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangarin</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
+	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+	<link rel="stylesheet" href="{% static 'css/ready.css' %}">
+	<link rel="stylesheet" href="{% static 'css/demo.css' %}">
+<style>
+        /* Your Custom Color Palette Integration */
+        :root {
+            --primary-green: #2F6B3F;
+            --sage: #7FB77E;
+            --accent-yellow: #F7C85C;
+            --cream: #FFF6C0;
+        }
+        .main-header, .logo-header, .sidebar { background-color: var(--primary-green) !important; }
+        .logo, .nav i, .nav p { color: white !important; }
+        .logo:hover { color: var(--accent-yellow) !important; }
+        .active > a { background-color: var(--sage) !important; }
+        .card-note { background-color: var(--cream); border-left: 5px solid var(--sage); }
+        .badge-priority { background-color: var(--accent-yellow); color: #000; }
+
+        .priority-critical { background-color: #dc3545; color: white; }
+        .priority-high     { background-color: #F7C85C; color: black; }
+        .priority-medium   { background-color: #7FB77E; color: white; }
+        .priority-low      { background-color: #2F6B3F; color: white; }
+        .priority-optional { background-color: #6c757d; color: white; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="main-header">
+            <div class="logo-header">
+                <a href="#" class="logo">Hangarin Dashboard</a>
+                <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            
+            <nav class="navbar navbar-header navbar-expand-lg" style="height: 65px; padding: 0;">
+                <div class="container-fluid d-flex align-items-center justify-content-center" style="height: 100%;">
+
+					<form class="navbar-left navbar-form nav-search mr-md-3" action="">
+						<div class="input-group">
+							<input type="text" placeholder="Search ..." class="form-control">
+							<div class="input-group-append">
+								<span class="input-group-text">
+									<i class="la la-search search-icon"></i>
+								</span>
+							</div>
+						</div>
+					</form>
+                </div>
+            </nav>
+        </div>
+
+        <div class="sidebar">
+            <div class="scrollbar-inner sidebar-wrapper">
+                <div class="user">
+            <div class="photo">
+                <img src="{% static 'img/profile.jpg' %}" alt="user-img">
+            </div>
+            <div class="info">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                    <span style="color:white;">
+                        {{ user.username|default:"Guest" }}
+                        <span class="user-level" style="color:white;">Administrator</span>
+                        <span class="caret"></span>
+                    </span>
+                </a>
+                <div class="clearfix"></div>
+
+                <ul class="dropdown-menu dropdown-user">
+                    <li>
+                        <div class="user-box">
+                            <div class="u-img"><img src="{% static 'img/profile.jpg' %}" alt="user"></div>
+                            <div class="u-text">
+                                <h4>{{ user.username }}</h4>
+                                <p class="text-muted">{{ user.email|default:"no-email@hangar.com" }}</p>
+                                <a href="#" class="btn btn-rounded btn-sm" style="background-color: #2F6B3F; color: white;">View Profile</a>
+                            </div>
+                        </div>
+                    </li>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#"><i class="la la-user"></i> My Profile</a>
+                    <a class="dropdown-item" href="#"><i class="la la-envelope"></i> Inbox</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#"><i class="la la-cog"></i> Settings</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#"><i class="la la-power-off"></i> Logout</a>
+                </ul>
+            </div>
+        </div>
+                <ul class="nav">
+                    <li class="nav-item active">
+                        <a href="#"><i class="la la-dashboard"></i><p>Home</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#"><i class="la la-check-circle"></i><p>To-Do Tasks</p></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#"><i class="la la-user"></i><p>Notes</p></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="main-panel">
+            <div class="content">
+                <div class="container-fluid">
+                    <h4 class="page-title">Task Overview</h4>
+                    
+                    <div class="row">
+                        {% for note in notes %}
+                        <div class="col-md-4">
+                            <div class="card card-note shadow-sm">
+                                <div class="card-body">
+                                    <h5 class="card-title"><strong>{{ note.task.title }}</strong></h5>
+                                    <p class="card-text">{{ note.content }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-title">Pending Tasks</div>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Task</th>
+                                                <th>Priority</th>
+                                                <th>Deadline</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for task in tasks %}
+                                            <tr>
+                                                <td>{{ task.title }}</td>
+                                                <td><span class="badge badge-priority">{{ task.priority.priority_level }}</span></td>
+                                                <td>{{ task.deadline }}</td>
+                                                <td>{{ task.status }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="{% static 'js/core/jquery.3.2.1.min.js' %}"></script>
+<script src="{% static 'js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js' %}"></script>
+<script src="{% static 'js/core/popper.min.js' %}"></script>
+<script src="{% static 'js/core/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/plugin/chartist/chartist.min.js' %}"></script>
+<script src="{% static 'js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js' %}"></script>
+<script src="{% static 'js/plugin/bootstrap-notify/bootstrap-notify.min.js' %}"></script>
+<script src="{% static 'js/plugin/bootstrap-toggle/bootstrap-toggle.min.js' %}"></script>
+<script src="{% static 'js/plugin/jquery-mapael/jquery.mapael.min.js' %}"></script>
+<script src="{% static 'js/plugin/jquery-mapael/maps/world_countries.min.js' %}"></script>
+<script src="{% static 'js/plugin/chart-circle/circles.min.js' %}"></script>
+<script src="{% static 'js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
+<script src="{% static 'js/ready.min.js' %}"></script>
+</html>
