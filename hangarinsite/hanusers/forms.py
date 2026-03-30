@@ -1,8 +1,8 @@
 from django.forms import ModelForm
 from django import forms
-from .models import Task
+from .models import Task, Note
 
-class TaskForm(forms.ModelForm):
+class TaskForm(ModelForm):
     class Meta:
         model = Task
         fields = ['title', 'description', 'deadline', 'status', 'category', 'priority']
@@ -20,3 +20,7 @@ class TaskForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter task title'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
+class NoteForm(ModelForm):
+    class Meta:
+        model = Note
+        fields = "__all__"
