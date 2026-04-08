@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path 
-from hanusers.views import DashboardView, TaskList, TaskCreateView, TaskUpdateView, TaskDeleteView, NoteList, NoteCreateView, NoteUpdateView, NoteDeleteView
+from hanusers.views import DashboardView, TaskList, TaskCreateView, TaskUpdateView, TaskDeleteView, NoteList, NoteCreateView, NoteUpdateView, NoteDeleteView, SubTaskList, SubTaskCreateView, SubTaskUpdateView, SubTaskDeleteView
 
 
 urlpatterns = [
@@ -27,9 +27,16 @@ urlpatterns = [
     path('task_list/add', TaskCreateView.as_view(), name='task-add'),
     path('task_list/<pk>', TaskUpdateView.as_view(), name='task-update'),
     path('task_list/<pk>/delete', TaskDeleteView.as_view(), name='task-delete'),
+    #____TASKS_SUBTASK____
+    path('task_list/<int:pk>/subtasks/', SubTaskList.as_view(), name='subtask-list'),
     #____NOTES____
     path('note_list', NoteList.as_view(), name='note-list'),
     path('note_list/add', NoteCreateView.as_view(), name='note-add'),
     path('note_list/<pk>', NoteUpdateView.as_view(), name='note-update'),
     path('note_list/<pk>/delete', NoteDeleteView.as_view(), name='note-delete'),
+    #____TASKS____
+    path('subtask_list', SubTaskList.as_view(), name='subtask-list'),
+    path('subtask_list/add', SubTaskCreateView.as_view(), name='subtask-add'),
+    path('subtask_list/<pk>', SubTaskUpdateView.as_view(), name='subtask-update'),
+    path('subtask_list/<pk>/delete', SubTaskDeleteView.as_view(), name='subtask-delete'),
 ]

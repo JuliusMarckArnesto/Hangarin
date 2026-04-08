@@ -20,14 +20,14 @@ class TaskAdmin(admin.ModelAdmin):
 
 @admin.register(SubTask)
 class SubTaskAdmin(admin.ModelAdmin):
-    list_display = ("subtask_title", "subtask_status", "get_parent_title",)
+    list_display = ("subtask_title", "subtask_status", "parent_task_name",)
     list_filter = ("subtask_status",)
+    search_fields = ("subtask_title",)
 
-    def get_parent_title(self, obj):
+    def parent_task_name(self, obj):
         if obj.parent_task:
             return obj.parent_task.title
         return "No Parent"
-    search_fields = ("subtask_title",)
 
 @admin.register(Note)
 class NoteAdmin(admin.ModelAdmin):

@@ -10,20 +10,36 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
 	<link rel="stylesheet" href="{% static 'css/ready.css' %}">
 	<link rel="stylesheet" href="{% static 'css/demo.css' %}">
-<style>
-        /* Your Custom Color Palette Integration */
+    <style>
         :root {
-            --primary-green: #2F6B3F;
-            --sage: #7FB77E;
-            --accent-yellow: #F7C85C;
-            --cream: #FFF6C0;
+        --primary-green: #2F6B3F;
+        --sage: #7FB77E;
+        --primary-blue: #0d6efd;
+        --light-blue: #8cbafe;
+        --hover-yellow: #F2D479;
+        --active-orange: #D97A2B;
+        --sidebar-bg: #FFFFFF;
         }
-        .main-header, .logo-header, .sidebar { background-color: var(--primary-green) !important; }
-        .logo, .nav i, .nav p { color: white !important; }
-        .logo:hover { color: var(--accent-yellow) !important; }
-        .active > a { background-color: var(--sage) !important; }
-        .card-note { background-color: var(--cream); border-left: 5px solid var(--sage); }
-        /* Base Styling (Shape only, no color) */
+
+        .main-header, .logo-header, .sidebar { 
+            background-color: var(--sidebar-bg) !important; 
+            border-right: 1px solid #eee; 
+        }
+
+        /* .logo, .nav i, .nav p, .user .info span { color: var(--primary-green) !important; } */
+        .nav li { margin: 5px 15px; }
+        .nav li a { border-radius: 20px !important; transition: all 0.3s ease;margin: 0 !important; }
+        .nav li a:hover { background-color: var(--hover-yellow) !important; }
+        .nav li.active > a { background-color: var(--active-orange) !important;box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .nav li.active a i, .nav li.active a p { color: #FFFFFF !important; }
+        .logo:hover { color: var(--active-orange) !important; }
+        .nav li.active > a::before,
+        .nav li > a::before {
+        background-color: transparent !important;
+        display: none !important;
+    }
+
+        /* Badge style */
         .badge-priority { 
             color: #000; 
             padding: 5px 12px;
@@ -42,6 +58,20 @@
         .priority-medium   { background-color: #7FB77E !important; color: white !important; }
         .priority-low      { background-color: #2F6B3F !important; color: white !important; }
         .priority-optional { background-color: #6c757d !important; color: white !important; }
+
+        /* Saturation of status  */
+        .badge-status {
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+
+        /* Dynamic Status Colors (Matching your priority logic) */
+        .status-completed   { background-color: var(--primary-blue) !important; color: white !important; }
+        .status-in_progress { background-color: white !important; color: var(--primary-blue) !important; opacity: 0.8; border: 1px solid var(--primary-blue);}
+        .status-pending     { background-color: var(--light-blue) !important; color: white !important; opacity: 0.4;  }
     </style>
 </head>
 <body>
@@ -54,8 +84,10 @@
                 </button>
             </div>
             
-            <nav class="navbar navbar-header navbar-expand-lg" style="height: 65px; padding: 0;">
-        <div class="container-fluid d-flex align-items-center justify-content-center" style="height: 100%;">
+            <span class="header-divider"></span>
+            
+            <nav class="navbar navbar-header navbar-expand-lg" >
+                <div class="container-fluid align-items-center justify-content-center">
 
 					<form class="navbar-left navbar-form nav-search mr-md-3" action="">
 						<div class="input-group">
@@ -73,49 +105,50 @@
 
         <div class="sidebar">
             <div class="scrollbar-inner sidebar-wrapper">
-                <div class="user">
-            <div class="photo">
-                <img src="{% static 'img/profile.jpg' %}" alt="user-img">
-            </div>
-            <div class="info">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                    <span style="color:white;">
-                        {{ user.username|default:"Guest" }}
-                        <span class="user-level" style="color:white;">Administrator</span>
-                        <span class="caret"></span>
-                    </span>
-                </a>
-                <div class="clearfix"></div>
-
-                <ul class="dropdown-menu dropdown-user">
-                    <li>
-                        <div class="user-box">
-                            <div class="u-img"><img src="{% static 'img/profile.jpg' %}" alt="user"></div>
-                            <div class="u-text">
-                                <h4>{{ user.username }}</h4>
-                                <p class="text-muted">{{ user.email|default:"no-email@hangar.com" }}</p>
-                                <a href="#" class="btn btn-rounded btn-sm" style="background-color: #2F6B3F; color: white;">View Profile</a>
-                            </div>
-                        </div>
-                    </li>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#"><i class="la la-user"></i> My Profile</a>
-                    <a class="dropdown-item" href="#"><i class="la la-envelope"></i> Inbox</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#"><i class="la la-cog"></i> Settings</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#"><i class="la la-power-off"></i> Logout</a>
-                </ul>
-            </div>
-        </div>
+                
                 <ul class="nav">
-                    <li class="nav-item active">
+                    <div class="user">
+                        <div class="photo">
+                            <img src="{% static 'img/profile.jpg' %}" alt="user-img">
+                        </div>
+                        <div class="info">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                                <span>
+                                    {{ user.username|default:"Guest" }}
+                                    <span class="user-level">Administrator</span>
+                                    <span class="caret"></span>
+                                </span>
+                            </a>
+                            <div class="clearfix"></div>
+
+                            <ul class="dropdown-menu dropdown-user dropdown-menu-left">
+                                <li>
+                                    <div class="user-box">
+                                        <div class="u-img"><img src="{% static 'img/profile.jpg' %}" alt="user"></div>
+                                        <div class="u-text">
+                                            <h4>{{ user.username }}</h4>
+                                            <p class="text-muted">{{ user.email|default:"no-email@hangar.com" }}</p>
+                                            <a href="#" class="btn btn-rounded btn-sm" style="background-color: #D97A2B; color: #eee;">View Profile</a>
+                                        </div>
+                                    </div>
+                                </li>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#"><i class="la la-user"></i> My Profile</a>
+                                <a class="dropdown-item" href="#"><i class="la la-envelope"></i> Inbox</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#"><i class="la la-cog"></i> Settings</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#"><i class="la la-power-off"></i> Logout</a>
+                            </ul>
+                        </div>
+                    </div>
+                    <li class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
                         <a href="{% url 'dashboard' %}"><i class="la la-dashboard"></i><p>Home</p></a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {% if request.resolver_match.url_name == 'task-list' %}active{% endif %}">
                         <a href="{% url 'task-list' %}"><i class="la la-check-circle"></i><p>To-Do Tasks</p></a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {% if request.resolver_match.url_name == 'note-list' %}active{% endif %}">
                         <a href="{% url 'note-list' %}"><i class="la la-user"></i><p>Notes</p></a>
                     </li>
                 </ul>

@@ -7,57 +7,100 @@
          <div class="card"> 
            <div class="card-header">  
              <div class="card-title">Task List</div>  
-             <!-- <div class="card-category">Page Subtitle</div>  -->
+             <div class="card-category">
+              <strong>Total:</strong> {{ total_tasks }} | 
+                <span class="text-success"><strong>Done:</strong> {{ completed_count }}</span> | 
+                <span class="text-warning"><strong>Doing:</strong> {{ in_progress_count }}</span> | 
+                <span class="text-danger"><strong>To Do:</strong> {{ pending_count }}</span>
+              </strong>
+             </div> 
            </div> 
            <br />
             <div class="col-md-12 row"> 
-              <div class="col-md-6"> 
-                <form class="navbar-left navbar-form nav-search mr-md-3" action=""> 
+              <div class="col-md"> 
+                <form class="navbar-left navbar-form nav-search mr-md-3" action="{% url 'task-list' %}"> 
                   <div class="input-group"> 
-                    <input type="text" placeholder="Search ..." class="form-control" name="q"  />  
+                    <input type="hidden" name="sort" value="{{ request.GET.sort }}">
+                    
+                    <input type="text" placeholder="Search ..." class="form-control" name="q" value="{{ request.GET.q }}" />  
                     <div class="input-group-append"> 
-                      <span class="input-group-text">  
+                      <button type="submit" class="input-group-text" style="border:none; background:none;">  
                           <i class="la la-search search-icon"></i>  
-                      </span> 
+                      </button>
                     </div>  
                   </div>  
                 </form>  
-                </div>  
-                <div class="col-md-6">  
-                  <div class="pull-right">  
-                    <a href="{% url 'task-add' %}" class="btn btn-success btn-rounded">Add Task</a> 
-                  </div>  
+              </div>
+              <div class="col-md-4 ">
+                <form method="get" class="row align-items-center">
+                  <!-- <div class="col-md-1">
+                    <label for="smallSelect" class="col-form-label">Sort by</label>
+                  </div> -->
+                  <div class="col-md-auto">
+                    <select name="sort_by" id="smallSelect" class="form-control form-control-sm w-auto">
+                      <option value="title" {% if request.GET.sort_by == 'title' %}selected{% endif %}>A-Z</option>
+                      <option value="-title" {% if request.GET.sort_by == '-title' %}selected{% endif %}>Z-A</option>
+                      <option value="-created_at" {% if request.GET.sort_by == '-created_at' or not request.GET.sort_by%}selected{% endif %}>Newest</option>
+                      <option value="created_at" {% if request.GET.sort_by == 'created_at' %}selected{% endif %}>Oldest</option>
+                    </select>
+                  </div>
+                  <button class="btn btn-primary btn-sm btn-rounded">Sort</button>
+                </form>
+              </div>  
+              <div class="col-md-2">    
+                  <a href="{% url 'task-add' %}" class="btn btn-success btn-rounded">Add Task</a>  
               </div> 
             </div>
+            
            <div class="card-body">  
              <table class="table table-striped mt-3">  
                <thead> 
                  <tr>  
                    <th scope="col">Title</th>  
-                   <th scope="col">Deadline</th>  
-                   <th scope="col">Status</th>
                    <th scope="col">Priority</th>
-                   <th scope="col">Category</th>
                    <th scope="col">...</th>
                  </tr> 
                </thead>  
                <tbody> 
                  {% for object in object_list %}  
-                    <tr> 
-                        <td>{{ object.title }}</td>  
-                        <td>{{ object.deadline }}</td> 
-                        <td>{{ object.status }}</td>  
-                        <td>{{ object.priority }}</td>  
-                        <td>{{ object.category }}</td>  
+                    <tr style='cursor: pointer;' class="clickable-row"
+                      data-href="{% url 'subtask-list' object.id %}">
+                        <td class="align-items-center">
+                          <div class="col-12">
+                            
+                            <div class="mb-1">
+                              <h5 class="m-0 font-weight-bold">{{ object.title }}</h5>
+                            </div>
+
+                            <div class="d-flex text-muted small">
+                              <div class="mr-3">
+                                <strong>{{ object.deadline }}</strong>
+                              </div>
+                              <div class="mr-3">
+                                 
+                                <span class="badge badge-status status-{{ object.status|slugify }}">
+                                  <i class="la la-circle-solid"> </i> {{ object.get_status_display }}
+                                </span>
+                              </div>
+                              <div>
+                                <span class="badge badge-info">
+                                  <i class="la la-circle-solid"></i> {{ object.category }}
+                                </span>
+                              </div>
+                            </div>
+
+                          </div>
+                        </td>
                         <td>
-                          <a href="task_list/{{ object.id }}">Edit</a>
-                          <a href="task_list/{{ object.id }}/delete">Delete</a>
+                          <span class="badge badge-priority priority-{{ object.priority.priority_level|lower }}">
+                              {{ object.priority.priority_level }}
+                          </span>
+                        </td>  
+                        <td>
+                          <a href="task_list/{{ object.id }}" onclick="event.stopPropagation();">Edit</a>
+                          <a href="task_list/{{ object.id }}/delete" onclick="event.stopPropagation();">Delete</a>
                         </td>
                     </tr> 
-                    <tr>
-                        <td scope="col">{{ object.description }}</td> 
-                    </tr>
-                  
                  {% empty %}
                  <tr>
                     <td colspan="4" style="text-align:center">
@@ -74,4 +117,15 @@
      </div>  
    </div>  
  </div> 
+ <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const rows = document.querySelectorAll(".clickable-row");
+        rows.forEach(row => {
+            row.addEventListener("click", () => {
+                window.location.href = row.dataset.href;
+            });
+        });
+    });
+</script>
+
 {% endblock %} 
