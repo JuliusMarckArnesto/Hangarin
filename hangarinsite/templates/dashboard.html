@@ -40,7 +40,11 @@
                     </span>
                 </td>
                 <td>{{ task.deadline }}</td>
-                <td>{{ task.get_status_display }}</td>
+                <td>
+                    <span class="badge badge-status status-{{ task.status|slugify }}"> 
+                        {{ task.get_status_display }}
+                    </span>
+                </td>
             </tr>
             {% endfor %}
         </tbody>

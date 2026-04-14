@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Task, Note, SubTask
+from .models import Task, Note, SubTask, Priority, Category
 from hanusers.forms import TaskForm, NoteForm, SubTaskForm
 from django.urls import reverse_lazy
 from django.db.models import Q
@@ -30,20 +30,30 @@ class TaskList(ListView):
     paginate_by = 20
 
     def get_ordering(self):
-        allowed = ["title", "-title", "created_at", "-created_at"]
+        allowed = ["title", "-title","priority__priority_level", "category__category_name", "created_at", "-created_at"]
         sort_by = self.request.GET.get("sort_by")
         if sort_by in allowed:
             return sort_by
-        return "title"
+        return "-created_at"
 
     def get_queryset(self):
+        #FFETCH THE DATA FROM html
         qs =  super().get_queryset()
+        qs = super().get_queryset().select_related('priority', 'category').prefetch_related('subtask_set', 'note_set')
         query = self.request.GET.get('q')
+        priority_id = self.request.GET.get('priority')
+        category_id = self.request.GET.get('category')
 
         if query:
             qs = qs.filter(
-                Q(title__icontains=query)
+                Q(title__icontains=query) |
+                Q(description__icontains=query)
             )
+        if priority_id:
+            qs =qs.filter(Q(priority_id=priority_id))
+        if category_id:
+            qs =qs.filter(Q(category_id=category_id))
+
         ordering = self.get_ordering()
         if ordering == 'title':
             qs = qs.annotate(lower_title=Lower('title')).order_by('lower_title')
@@ -56,12 +66,14 @@ class TaskList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        tasks = Task.objects.all()
+        tasks_progress = Task.objects.all()
 
-        context['total_tasks'] = tasks.count()
-        context['completed_count'] = tasks.filter(status='completed').count()
-        context['in_progress_count'] = tasks.filter(status='in_progress').count()
-        context['pending_count'] = tasks.filter(status='pending').count()
+        context['total_tasks'] = tasks_progress.count()
+        context['completed_count'] = tasks_progress.filter(status='completed').count()
+        context['in_progress_count'] = tasks_progress.filter(status='in_progress').count()
+        context['pending_count'] = tasks_progress.filter(status='pending').count()
+        context['all_priority'] = Priority.objects.all()
+        context['all_category'] = Category.objects.all()
 
         return context
 
