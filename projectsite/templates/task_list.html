@@ -45,11 +45,11 @@
                 {% for task in tasklist %}
                 <a href="#exampleModal" class="list-group-item list-group-item-action flex-column align-items-start" data-toggle="modal" data-target="#exampleModal">
                     <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">{{ task.title}}</h5>
-                    <small class="text-muted">3 days ago. This is a long text that should be truncated.</small>
+                    <h5 class="mb-1">count:{{ forloop.counter }}. ID:{{ task.id }} {{ task.title }}</h5>
+                    <small class="text-muted">3 days ago. This is a long text that should be truncated. </small>
                     </div>
                     <p class="mb-1">{{ task.description }}</p>
-                    <small class="text-muted">{{ task.updated_at|date:"d-M-Y H:-i" }}</small>
+                    <small class="text-muted">{{ task.deadline|date:"d-M-Y H:i" }}</small>
                 </a>
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">

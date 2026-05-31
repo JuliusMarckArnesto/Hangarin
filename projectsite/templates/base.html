@@ -70,14 +70,14 @@
                     </div>
                 </div>
                 <ul class="nav">
-                    <li class="nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                    <li class="nav-item {% if request.resolver_match.url_name == 'task-list' %}active{% endif %}">
                         <a href="{% url 'task-list' %}">
                             <i class="la la-list"></i>
                             <p>Tasks</p>
                         </a>
                     </li>
-                    <li class="nav-item {% if request.resolver_match.url_name == 'organization-list' %}active{% endif %}">
-                        <a href="#">
+                    <li class="nav-item {% if request.resolver_match.url_name == 'note-list' %}active{% endif %}">
+                        <a href="{% url 'note-list' %}">
                             <i class="la la-sticky-note"></i>
                             <p>Notes</p>
                         </a>

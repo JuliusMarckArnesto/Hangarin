@@ -7,3 +7,9 @@ class TaskListView(ListView):
     context_object_name = 'tasklist'
     template_name = 'task_list.html'
     paginate_by = None
+
+class NoteListView(ListView):
+    model = Note
+    context_object_name = "notelist"
+    template_name = "note_list.html"
+    paginate_by = None
