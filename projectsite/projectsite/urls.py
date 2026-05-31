@@ -24,6 +24,8 @@ urlpatterns = [
     path('', views.TaskListView.as_view(), name='task-list'),
     path('tasks/', views.TaskListView.as_view(), name='task-list'), #Redundant ba to?
     path('tasks/add', views.TaskCreateView.as_view(), name='task-add'),
+    path('tasks/<int:pk>', views.TaskUpdateView.as_view(), name='task-update'),
+    path('tasks/<int:pk>/delete', views.TaskDeleteView.as_view(), name='task-delete'),
     #---NOTES---
     path('notes/', views.NoteListView.as_view(), name='note-list'),
 ]

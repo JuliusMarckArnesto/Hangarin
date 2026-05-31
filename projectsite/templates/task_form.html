@@ -1,11 +1,14 @@
 {% extends 'base.html' %} {% load static %} {% block content %} 
 <div class="content">
     <div class="container-fluid">
-        <h4.title-page>Tasks</h4>
-        <br/>
+        <div class="row">
+            <h4.title-page>Tasks</h4>
+        </div>
+        <br>
         <div class="positon-sticky">
             <a href="{% url 'task-list' %}" class="btn btn-secondary btn-rounded"><i class="la la-arrow-left"> Back</i></a>
         </div>
+        <br>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
