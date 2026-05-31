@@ -71,7 +71,7 @@
                 </div>
                 <ul class="nav">
                     <li class="nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
-                        <a href="#">
+                        <a href="{% url 'task-list' %}">
                             <i class="la la-list"></i>
                             <p>Tasks</p>
                         </a>
