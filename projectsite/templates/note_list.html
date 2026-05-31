@@ -35,7 +35,7 @@
                 </div>
                 <div class="col-md-6 position-sticky">  
                     <div class="pull-right position-sticky">  
-                        <a href="#" class="btn btn-success btn-rounded"><i class="la la-plus"> Add</i></a>
+                        <a href="{% url 'note-add' %}" class="btn btn-success btn-rounded"><i class="la la-plus"> Add</i></a>
                     </div>  
                 </div> 
                 </div>
@@ -80,7 +80,8 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary">Save changes</button>
+                                <a href="{% url 'note-delete' note.id %}" class="btn btn-success">Delete</a>
+                                <a href="{% url 'note-update' note.id %}" class="btn btn-success">Edit</a></a>
                             </div>
                         </div>
                     </div>

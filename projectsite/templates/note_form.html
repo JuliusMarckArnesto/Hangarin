@@ -1,0 +1,33 @@
+{% extends 'base.html' %} {% load static %} {% block content %} 
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <h4.title-page>Notes</h4>
+        </div>
+        <br>
+        <div class="positon-sticky">
+            <a href="{% url 'note-list' %}" class="btn btn-secondary btn-rounded"><i class="la la-arrow-left"> Back</i></a>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">{% if object %}Update Notes{% else %}Add Notes{% endif%}</div>
+                    </div>
+                    <div class="card-body">
+                        <form class="" action="" method="post" novalidate>
+                            {% csrf_token %} {% include 'includes/form.html' %}
+                            <div class="form-group">
+                                <div class="col-md-12 col-sm-3">
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

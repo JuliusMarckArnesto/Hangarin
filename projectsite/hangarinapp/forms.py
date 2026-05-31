@@ -56,3 +56,26 @@ class TaskForm(ModelForm):
         if commit:
             instance.save()
         return instance
+    
+class NoteForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Allow saving even when some fields are omitted in the form
+        optional_fields = ['task', 'content']
+        for name in optional_fields:
+            if name in self.fields:
+                self.fields[name].required = False
+    
+    class Meta:
+        model = Note
+        fields = "__all__" 
+        widgets = {
+            'task': Select(attrs={
+                'class': 'form-control'
+            }),
+            'content': Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Enter note content'
+            }),
+        }

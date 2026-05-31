@@ -21,6 +21,7 @@ from hangarinapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    #---TASKS---
     path('', views.TaskListView.as_view(), name='task-list'),
     path('tasks/', views.TaskListView.as_view(), name='task-list'), #Redundant ba to?
     path('tasks/add', views.TaskCreateView.as_view(), name='task-add'),
@@ -28,4 +29,7 @@ urlpatterns = [
     path('tasks/<int:pk>/delete', views.TaskDeleteView.as_view(), name='task-delete'),
     #---NOTES---
     path('notes/', views.NoteListView.as_view(), name='note-list'),
+    path('notes/add', views.NoteCreateView.as_view(), name='note-add'),
+    path('notes/<int:pk>', views.NoteUpdateView.as_view(), name='note-update'),
+    path('notes/<int:pk>/delete', views.NoteDeleteView.as_view(), name='note-delete'),
 ]
