@@ -16,12 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from hangarinapp.views import TaskListView
+from hangarinapp.views import TaskListView, TaskCreateView
 from hangarinapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.TaskListView.as_view(), name='task-list'),
     path('tasks/', views.TaskListView.as_view(), name='task-list'), #Redundant ba to?
+    path('tasks/add', views.TaskCreateView.as_view(), name='task-add'),
+    #---NOTES---
     path('notes/', views.NoteListView.as_view(), name='note-list'),
 ]
