@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block content %} {% load static %}
+{% extends 'base.html' %} {% block content %} {% load static %} {% load widget_tweaks %}
 <div class="content">
     <div class="content-fluid">
         <h4 class="page-title">Tasks</h4>
@@ -48,14 +48,21 @@
                     <h5 class="mb-1">count:{{ forloop.counter }}. ID:{{ task.id }} {{ task.title }}</h5>
                     <small class="text-muted">3 days ago. This is a long text that should be truncated. </small>
                     </div>
-                    <p class="mb-1">{{ task.description }}</p>
-                    <small class="text-muted">{{ task.deadline|date:"d-M-Y H:i" }}</small>
+                    <p class="mb-1">{{ task.description|truncatechars:100 }}</p>
+                    <small class="text-muted">
+                        {{ task.deadline|date:"d-M-Y H:i" }}
+                        {% if task.is_overdue %}
+                            <span class="text-danger">(passed)</span>
+                        {% else %}
+                            <span class="text-success">(in {{ task.deadline|timeuntil }})</span>
+                        {% endif %}
+                    </small>
                 </a>
                 <div class="modal fade" id="taskModal{{ task.id }}" tabindex="-1" aria-labelledby="taskModalLabel{{ task.id }}" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="taskModalLabel{{ task.id }}">{{ task.title }}</h1>
+                                <h3 class="modal-title fs-5" id="taskModalLabel{{ task.id }}"><strong>{{ task.title }}</strong></h3>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -72,11 +79,54 @@
                                 <span class="badge badge-dark">Dark</span>
                                 <br>
                                 {{ task.description }}
-                                ...
                                 <hr>
-                                ...
+                                <!-- NOTE SECTION -->
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0"><strong>Notes</strong></h5>
+                                    <a href="{% url 'note-add' %}?source=task-list&task={{ task.id }}" class="btn btn-primary btn-sm">
+                                        <i class="la la-plus"> Add</i>
+                                    </a>
+                                </div>
+                                <br>
+                                {% for note in task.note_set.all %}
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5>Note {{ forloop.counter }}</h5>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a href="{% url 'note-update' note.id %}?source=task-list" class="btn btn-sm btn-warning">Edit</a>
+                                            <a href="{% url 'note-delete' note.id %}?source=task-list" class="btn btn-sm btn-danger">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                    <p>{{ note.content }}</p>
+                                {% empty %}
+                                    <p>No notes for this task.</p>
+                                {% endfor %}
                                 <hr>
-                                ...
+                                <!-- SUBTASK SECTION -->
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0"><strong>Subtasks</strong></h5>
+                                    <a href="{% url 'subtask-add' %}?source=task-list&task={{ task.id }}" class="btn btn-primary btn-sm">
+                                        <i class="la la-plus"> Add</i>
+                                    </a>
+                                </div>
+                                <br>
+                                {% for subtask in task.subtask_set.all %}
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5>Subtask {{ forloop.counter }}</h5>
+                                    <input type="checkbox" {% if subtask.is_completed %}checked{% endif %}>
+                                    <p>{{ subtask.subtask_title }}</p>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a href="{% url 'subtask-update' subtask.id %}?source=task-list" class="btn btn-sm btn-warning">Edit</a>
+                                            <a href="{% url 'subtask-delete' subtask.id %}?source=task-list" class="btn btn-sm btn-danger">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                    
+                                {% empty %}
+                                    <p>No subtasks for this task.</p>
+                                {% endfor %}
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

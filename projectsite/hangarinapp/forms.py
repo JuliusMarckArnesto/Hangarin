@@ -1,7 +1,7 @@
 from django.forms import ModelForm, DateTimeInput, Textarea, TextInput, Select
 from django import forms
 from django.utils import timezone
-from .models import Task, Note, Category, Priority
+from .models import Task, Note, SubTask, Category, Priority
 
 class TaskForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -25,10 +25,10 @@ class TaskForm(ModelForm):
                 'rows': 4,
                 'placeholder': 'Enter task description'
             }),
-            'deadline': DateTimeInput(attrs={
-                'class': 'form-control',
-                'type': 'datetime-local'
-            }),
+            'deadline': forms.DateTimeInput(
+                attrs={'type': 'datetime-local', 'class': 'form-control'},
+                format='%Y-%m-%dT%H:%M'
+            ),
             'status': Select(attrs={
                 'class': 'form-control'
             }),
@@ -78,4 +78,21 @@ class NoteForm(ModelForm):
                 'rows': 4,
                 'placeholder': 'Enter note content'
             }),
+        }
+
+class SubTaskForm(ModelForm):
+    class Meta:
+        model = SubTask
+        fields = "__all__"
+        widgets = {
+            'parent_task': Select(attrs={
+                'class': 'form-control'
+            }),
+            'subtask_title': TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter subtask title'
+            }),
+            'subtask_status': Select(attrs={
+                'class': 'form-control'
+            })
         }

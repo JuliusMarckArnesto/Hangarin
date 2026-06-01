@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic.list import ListView
 from hangarinapp.models import Task, Note, SubTask, Category, Priority
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from hangarinapp.forms import TaskForm, NoteForm
+from hangarinapp.forms import TaskForm, NoteForm, SubTaskForm
 from django.urls import reverse_lazy
 
 class TaskListView(ListView):
@@ -35,19 +35,67 @@ class NoteListView(ListView):
     template_name = "note_list.html"
     paginate_by = None
 
+class NoteNoteTaskModal(ListView):
+    model = Note
+    context_object_name = "notetasklist"
+    template_name = "task_list.html"
+    paginate_by = None
+
 class NoteCreateView(CreateView):
     model = Note
     form_class = NoteForm
     template_name = 'note_form.html'
-    success_url = reverse_lazy('note-list')
+    
+    def get_success_url(self):
+        source = self.request.POST.get('source', 'note-list')
+        return reverse_lazy(source)
 
 class NoteUpdateView(UpdateView):
     model = Note
     form_class = NoteForm
     template_name = "note_form.html"
-    success_url = reverse_lazy('note-list')
+    
+    def get_success_url(self):
+        source = self.request.POST.get('source', 'note-list')
+        return reverse_lazy(source)
 
 class NoteDeleteView(DeleteView):
     model = Note
     template_name = 'note_delete.html'
-    success_url = reverse_lazy('note-list')
+    
+    def get_success_url(self):
+        source = self.request.POST.get('source', 'note-list')
+        return reverse_lazy(source)
+
+class SubTaskCreateView(CreateView):
+    model = SubTask
+    form_class = SubTaskForm
+    template_name = 'subtask_form.html'
+
+    def get_initial(self):
+        initial = super().get_initial()
+        task_id = self.request.GET.get('task') 
+        if task_id:
+            initial['parent_task'] = task_id
+        return initial
+
+    def get_success_url(self):
+        source = self.request.POST.get('source', 'task-list')
+        return reverse_lazy(source)
+
+class SubTaskUpdateView(UpdateView):
+    model = SubTask
+    form_class = SubTaskForm
+    template_name = "subtask_form.html"
+
+    def get_success_url(self):
+        source = self.request.POST.get('source', 'task-list')
+        return reverse_lazy(source)
+
+class SubTaskDeleteView(DeleteView):
+    model = SubTask
+    template_name = 'subtask_delete.html'
+
+    def get_success_url(self):
+        source = self.request.POST.get('source', 'task-list')
+        return reverse_lazy(source)

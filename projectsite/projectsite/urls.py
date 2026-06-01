@@ -32,4 +32,8 @@ urlpatterns = [
     path('notes/add', views.NoteCreateView.as_view(), name='note-add'),
     path('notes/<int:pk>', views.NoteUpdateView.as_view(), name='note-update'),
     path('notes/<int:pk>/delete', views.NoteDeleteView.as_view(), name='note-delete'),
+    #---SUBTASKS---
+    path('subtasks/add', views.SubTaskCreateView.as_view(), name='subtask-add'),
+    path('subtask/<int:pk>', views.SubTaskUpdateView.as_view(), name='subtask-update'),
+    path('subtask/<int:pk>/delete', views.SubTaskDeleteView.as_view(), name='subtask-delete'),
 ]
