@@ -36,4 +36,6 @@ urlpatterns = [
     path('subtasks/add', views.SubTaskCreateView.as_view(), name='subtask-add'),
     path('subtask/<int:pk>', views.SubTaskUpdateView.as_view(), name='subtask-update'),
     path('subtask/<int:pk>/delete', views.SubTaskDeleteView.as_view(), name='subtask-delete'),
+    #---MODALS---
+    path('subtask/<int:pk>/toggle', views.SubTaskToggleView.as_view(), name='subtask-toggle'),
 ]

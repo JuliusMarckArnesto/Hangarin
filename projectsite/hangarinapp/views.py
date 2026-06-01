@@ -4,7 +4,8 @@ from hangarinapp.models import Task, Note, SubTask, Category, Priority
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from hangarinapp.forms import TaskForm, NoteForm, SubTaskForm
 from django.urls import reverse_lazy
-
+from django.shortcuts import get_object_or_404, redirect
+from django.views import View
 class TaskListView(ListView):
     model = Task
     context_object_name = 'tasklist'
@@ -99,3 +100,13 @@ class SubTaskDeleteView(DeleteView):
     def get_success_url(self):
         source = self.request.POST.get('source', 'task-list')
         return reverse_lazy(source)
+
+class SubTaskToggleView(View):
+    def post(self, request, pk):
+        subtask = get_object_or_404(SubTask, pk=pk)
+        if subtask.subtask_status == "Completed":
+            subtask.subtask_status = "Pending"
+        else:
+            subtask.subtask_status = "Completed"
+        subtask.save()
+        return redirect(request.POST.get('source', 'task-list'))

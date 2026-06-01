@@ -35,7 +35,7 @@
                 </div>
                 <div class="col-md-6">  
                     <div class="pull-right position-sticky">  
-                        <a href="{%url 'task-add' %}" class="btn btn-success btn-rounded"><i class="la la-plus"> Add </i></a>
+                        <a href="{%url 'task-add' %}" class="btn btn-success"><i class="la la-plus"> Add </i></a>
                     </div>  
                 </div> 
                 </div>
@@ -45,13 +45,31 @@
                 {% for task in tasklist %}
                 <a href="#taskModal{{ task.id }}" class="list-group-item list-group-item-action flex-column align-items-start" data-toggle="modal" data-target="#taskModal{{ task.id }}">
                     <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">count:{{ forloop.counter }}. ID:{{ task.id }} {{ task.title }}</h5>
-                    <small class="text-muted">3 days ago. This is a long text that should be truncated. </small>
+                        <h6 class="mb-1"> {{ task.title }}</h6> 
+                        <!-- count:{{ forloop.counter }}. ID:{{ task.id }} -->
+                        <div>
+                            <span class="badge 
+                                {% if task.status == 'Completed' %}badge-success
+                                {% elif task.status == 'In Progress' %}badge-warning
+                                {% else %}badge-secondary{% endif %}">
+                                {{ task.status }}
+                            </span>
+                            <span class="badge badge-info">{{ task.category }}</span>
+                            <span class="badge 
+                                {% if task.priority.priority_level == 'High' %}badge-danger
+                                {% elif task.priority.priority_level == 'medium' %}badge-warning
+                                {% elif task.priority.priority_level == 'low' %}badge-light
+                                {% elif task.priority.priority_level == 'optional' %}badge-secondary
+                                {% else %}badge-success{% endif %}">
+                                {{ task.priority }}
+                            </span>
+                        </div>
                     </div>
                     <p class="mb-1">{{ task.description|truncatechars:100 }}</p>
                     <small class="text-muted">
                         {{ task.deadline|date:"d-M-Y H:i" }}
-                        {% if task.is_overdue %}
+                        {% now "U" as now_timestamp %}
+                        {% if task.deadline|date:"U" < now_timestamp %}
                             <span class="text-danger">(passed)</span>
                         {% else %}
                             <span class="text-success">(in {{ task.deadline|timeuntil }})</span>
@@ -68,40 +86,26 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                
-                                <span class="badge badge-primary">Primary</span>
-                                <span class="badge badge-secondary">Secondary</span>
-                                <span class="badge badge-success">Success</span>
-                                <span class="badge badge-danger">Danger</span>
-                                <span class="badge badge-warning">Warning</span>
-                                <span class="badge badge-info">Info</span>
-                                <span class="badge badge-light">Light</span>
-                                <span class="badge badge-dark">Dark</span>
+                                <div>
+                                    <span class="badge 
+                                        {% if task.status == 'Completed' %}badge-success
+                                        {% elif task.status == 'In Progress' %}badge-warning
+                                        {% else %}badge-secondary{% endif %}">
+                                        {{ task.status }}
+                                    </span>
+                                    <span class="badge badge-info">{{ task.category }}</span>
+                                    <span class="badge 
+                                        {% if task.priority.priority_level == 'high' %}badge-danger
+                                        {% elif task.priority.priority_level == 'medium' %}badge-warning
+                                        {% elif task.priority.priority_level == 'low' %}badge-light
+                                        {% elif task.priority.priority_level == 'optional' %}badge-secondary
+                                        {% else %}badge-success{% endif %}">
+                                        {{ task.priority }}
+                                    </span>
+                                </div>
                                 <br>
                                 {{ task.description }}
-                                <hr>
-                                <!-- NOTE SECTION -->
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="mb-0"><strong>Notes</strong></h5>
-                                    <a href="{% url 'note-add' %}?source=task-list&task={{ task.id }}" class="btn btn-primary btn-sm">
-                                        <i class="la la-plus"> Add</i>
-                                    </a>
-                                </div>
-                                <br>
-                                {% for note in task.note_set.all %}
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5>Note {{ forloop.counter }}</h5>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <a href="{% url 'note-update' note.id %}?source=task-list" class="btn btn-sm btn-warning">Edit</a>
-                                            <a href="{% url 'note-delete' note.id %}?source=task-list" class="btn btn-sm btn-danger">Delete</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                    <p>{{ note.content }}</p>
-                                {% empty %}
-                                    <p>No notes for this task.</p>
-                                {% endfor %}
+                                
                                 <hr>
                                 <!-- SUBTASK SECTION -->
                                 <div class="d-flex justify-content-between align-items-center">
@@ -113,19 +117,56 @@
                                 <br>
                                 {% for subtask in task.subtask_set.all %}
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h5>Subtask {{ forloop.counter }}</h5>
-                                    <input type="checkbox" {% if subtask.is_completed %}checked{% endif %}>
-                                    <p>{{ subtask.subtask_title }}</p>
+                                    <div class="d-flex align-items-center
+                                        {% if subtask.subtask_status == 'Completed' %}subtask-done
+                                        {% elif subtask.subtask_status == 'In Progress' %}subtask-progress
+                                        {% endif %}"
+                                        id="subtask-row-{{ subtask.id }}">
+                                        <input type="checkbox"
+                                            class="subtask-checkbox mr-2"
+                                            data-url="{% url 'subtask-toggle' subtask.id %}"
+                                            data-id="{{ subtask.id }}"
+                                            {% if subtask.subtask_status == "Completed" %}checked{% endif %}
+                                            style="width:1.1rem; height:1.1rem; cursor:pointer; accent-color: hsl(38, 92%, 50%);">
+                                        <span id="subtask-title-{{ subtask.id }}"
+                                            style="{% if subtask.subtask_status == 'Completed' %}text-decoration:line-through; color:#aaa;{% endif %}">
+                                            {{ subtask.subtask_title }}
+                                        </span>
+                                    </div>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <a href="{% url 'subtask-update' subtask.id %}?source=task-list" class="btn btn-sm btn-warning">Edit</a>
-                                            <a href="{% url 'subtask-delete' subtask.id %}?source=task-list" class="btn btn-sm btn-danger">Delete</a>
+                                            <a href="{% url 'subtask-update' subtask.id %}?source=task-list" class="text-warning"><i class="la la-edit"></i></a>
+                                            <a href="{% url 'subtask-delete' subtask.id %}?source=task-list" class="text-danger"><i class="la la-trash"></i></a>
                                         </div>
                                     </div>
                                 </div>
                                     
                                 {% empty %}
                                     <p>No subtasks for this task.</p>
+                                {% endfor %}
+                                
+                                <hr>
+                                <!-- NOTE SECTION -->
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0"><strong>Notes</strong></h5>
+                                    <a href="{% url 'note-add' %}?source=task-list&task={{ task.id }}" class="btn btn-primary btn-sm">
+                                        <i class="la la-plus"> Add</i>
+                                    </a>
+                                </div>
+                                <br>
+                                {% for note in task.note_set.all %}
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6>Note {{ forloop.counter }}</h6>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <a href="{% url 'note-update' note.id %}?source=task-list" class="text-warning"><i class="la la-edit"></i></a>
+                                            <a href="{% url 'note-delete' note.id %}?source=task-list" class="text-danger"><i class="la la-trash"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                    <p>{{ note.content }}</p>
+                                {% empty %}
+                                    <p>No notes for this task.</p>
                                 {% endfor %}
                             </div>
                             <div class="modal-footer">

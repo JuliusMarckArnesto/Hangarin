@@ -1,0 +1,357 @@
+/* ── 1. Design Tokens ──────────────────────────────────────── */
+:root {
+  /* Primary – amber */
+  --color-primary:          hsl(38, 92%, 50%);   /* #f59e0b */
+  --color-primary-dark:     hsl(38, 92%, 40%);   /* hover/active */
+  --color-primary-light:    hsl(38, 92%, 94%);   /* tints / bg */
+  --color-primary-text:     hsl(38, 30%, 12%);   /* text on amber btn */
+
+  /* Utility */
+  --color-success:          hsl(142, 71%, 45%);  /* green  */
+  --color-success-dark:     hsl(142, 71%, 35%);
+  --color-danger:           hsl(0,   84%, 55%);  /* red    */
+  --color-danger-dark:      hsl(0,   84%, 44%);
+  --color-warning:          hsl(45,  96%, 52%);  /* yellow */
+  --color-warning-dark:     hsl(45,  96%, 42%);
+  --color-info:             hsl(199, 89%, 48%);  /* teal   */
+  --color-info-dark:        hsl(199, 89%, 38%);
+
+  /* Neutrals */
+  --color-bg:               hsl(0, 0%, 97%);
+  --color-surface:          hsl(0, 0%, 100%);
+  --color-border:           hsl(0, 0%, 88%);
+  --color-text:             hsl(222, 20%, 18%);
+  --color-text-muted:       hsl(222, 10%, 50%);
+  --color-sidebar-bg:       hsl(222, 25%, 18%);
+  --color-sidebar-text:     hsl(222, 15%, 75%);
+  --color-sidebar-active:   hsl(38, 92%, 50%);   /* amber, not blue */
+  --color-header-bg:        hsl(0, 0%, 100%);
+}
+
+/* Search bar – adjust the px values to taste */
+.nav-search .input-group .form-control {
+  border-radius: 20px 0 0 20px;   /* round left side only */
+  border-right:  none;
+}
+
+.nav-search .input-group-append .input-group-text {
+  border-radius: 0 20px 20px 0;   /* round right side only */
+  border-left:   none;
+}
+
+.subtask-progress {
+  background-color: hsl(38, 92%, 94%);
+  border-left: 3px solid hsl(38, 92%, 50%);
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+.subtask-done {
+  padding: 4px 8px;
+  margin-bottom: 4px;
+  opacity: 0.6;
+}
+
+/* ── 2. Button Overrides ────────────────────────────────────── */
+
+/* btn-primary  →  amber */
+.btn-primary,
+.btn-primary:visited {
+  background-color: var(--color-primary) !important;
+  border-color:     var(--color-primary) !important;
+  color:            var(--color-primary-text) !important;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: var(--color-primary-dark) !important;
+  border-color:     var(--color-primary-dark) !important;
+  color:            var(--color-primary-text) !important;
+}
+
+/* btn-success used for Add / Edit  →  amber (matches primary) */
+.btn-success,
+.btn-success:visited {
+  background-color: var(--color-primary) !important;
+  border-color:     var(--color-primary) !important;
+  color:            var(--color-primary-text) !important;
+}
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active {
+  background-color: var(--color-primary-dark) !important;
+  border-color:     var(--color-primary-dark) !important;
+  color:            var(--color-primary-text) !important;
+}
+
+/* Delete buttons  →  red */
+/* Handles both .btn-danger and the Delete anchor in modals/forms */
+.btn-danger,
+a.btn[href*="delete"],
+button[type="submit"].btn-primary:only-child,   /* delete confirm page */
+.modal-footer a.btn:first-of-type {             /* first action = Delete */
+  /* kept separate so only explicit delete triggers get red */
+}
+
+/* Be explicit: any link/button with "delete" semantics */
+.btn-danger {
+  background-color: var(--color-danger) !important;
+  border-color:     var(--color-danger) !important;
+  color:            hsl(0, 0%, 100%) !important;
+}
+.btn-danger:hover,
+.btn-danger:focus {
+  background-color: var(--color-danger-dark) !important;
+  border-color:     var(--color-danger-dark) !important;
+}
+
+/* Delete confirm page submit button  */
+.card-body form button[type="submit"] {
+  background-color: var(--color-danger) !important;
+  border-color:     var(--color-danger) !important;
+  color:            hsl(0, 0%, 100%) !important;
+}
+.card-body form button[type="submit"]:hover {
+  background-color: var(--color-danger-dark) !important;
+  border-color:     var(--color-danger-dark) !important;
+}
+
+/* Modal Delete link – typically the first action button */
+.modal-footer a.btn-success:first-of-type {
+  background-color: var(--color-danger) !important;
+  border-color:     var(--color-danger) !important;
+  color:            hsl(0, 0%, 100%) !important;
+}
+.modal-footer a.btn-success:first-of-type:hover {
+  background-color: var(--color-danger-dark) !important;
+  border-color:     var(--color-danger-dark) !important;
+}
+
+/* Inline icon edit/delete links in task & note lists */
+a.text-warning { color: var(--color-primary) !important; }
+a.text-danger  { color: var(--color-danger)  !important; }
+
+
+/* ── 3. Sidebar – light by default, amber accents ───────────── */
+
+/* Force light background in default (non-dark) state */
+.sidebar,
+.sidebar-wrapper {
+  background-color: hsl(0, 0%, 100%) !important;
+  border-right: 1px solid hsl(0, 0%, 90%) !important;
+}
+
+/* Default nav link text — dark on light bg */
+.sidebar .nav > li > a,
+.sidebar .nav > li > a i,
+.sidebar .nav > li > a p {
+  color: hsl(222, 20%, 30%) !important;
+}
+
+/* Active nav item → amber */
+.sidebar .nav > li.active > a,
+.sidebar .nav > li.active > a i,
+.sidebar .nav > li.active > a p {
+  color: var(--color-primary) !important;
+}
+
+/* Active indicator bar / background */
+.sidebar .nav > li.active > a::before,
+.sidebar .nav > li.active > a::after {
+  background-color: var(--color-primary) !important;
+}
+
+/* Hover state → amber */
+.sidebar .nav > li > a:hover,
+.sidebar .nav > li > a:hover i {
+  color: var(--color-primary) !important;
+}
+
+/* Sidebar header / user section */
+.sidebar .user,
+.sidebar .info a span {
+  color: hsl(222, 20%, 25%) !important;
+}
+
+/* Remove any blue/teal link colour the theme injects */
+.sidebar a {
+  color: inherit;
+}
+
+
+/* ── 4. Dark-mode Toggle Button (header) ───────────────────── */
+#dark-mode-toggle {
+  display:         inline-flex;
+  align-items:     center;
+  gap:             6px;
+  padding:         5px 12px;
+  border:          1.5px solid var(--color-primary);
+  border-radius:   20px;
+  background:      transparent;
+  color:           var(--color-primary);
+  font-size:       0.8rem;
+  font-weight:     600;
+  cursor:          pointer;
+  transition:      background 0.2s, color 0.2s;
+}
+#dark-mode-toggle:hover {
+  background:  var(--color-primary);
+  color:       var(--color-primary-text);
+}
+#dark-mode-toggle .toggle-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+
+/* ── 5. Dark Mode Styles (only active with .dark-mode class) ── */
+
+body.dark-mode {
+  --color-bg:           hsl(222, 20%, 10%);
+  --color-surface:      hsl(222, 20%, 14%);
+  --color-border:       hsl(222, 15%, 22%);
+  --color-text:         hsl(222, 15%, 88%);
+  --color-text-muted:   hsl(222, 10%, 55%);
+  --color-header-bg:    hsl(222, 20%, 12%);
+  --color-sidebar-bg:   hsl(222, 25%, 10%);
+  --color-sidebar-text: hsl(222, 15%, 65%);
+
+  background-color: var(--color-bg) !important;
+  color:            var(--color-text) !important;
+}
+
+body.dark-mode .main-header,
+body.dark-mode .navbar,
+body.dark-mode .logo-header {
+  background-color: var(--color-header-bg) !important;
+  border-color:     var(--color-border) !important;
+}
+
+body.dark-mode .sidebar,
+body.dark-mode .sidebar-wrapper {
+  background-color: var(--color-sidebar-bg) !important;
+}
+
+body.dark-mode .sidebar .nav > li > a,
+body.dark-mode .sidebar .nav > li > a i,
+body.dark-mode .sidebar .nav > li > a p {
+  color: var(--color-sidebar-text) !important;
+}
+
+body.dark-mode .sidebar .nav > li.active > a,
+body.dark-mode .sidebar .nav > li.active > a i {
+  color: var(--color-primary) !important;
+}
+
+body.dark-mode .main-panel {
+  background-color: var(--color-bg) !important;
+}
+
+body.dark-mode .card {
+  background-color: var(--color-surface) !important;
+  border-color:     var(--color-border) !important;
+  color:            var(--color-text) !important;
+}
+
+body.dark-mode .card-header {
+  background-color: hsl(222, 20%, 16%) !important;
+  border-color:     var(--color-border) !important;
+}
+
+body.dark-mode .card-title,
+body.dark-mode .page-title,
+body.dark-mode h1, body.dark-mode h2, body.dark-mode h3,
+body.dark-mode h4, body.dark-mode h5, body.dark-mode h6,
+body.dark-mode label,
+body.dark-mode strong,
+body.dark-mode .logo-header a,
+body.dark-mode p {
+  color: var(--color-text) !important;
+}
+
+body.dark-mode .list-group-item {
+  background-color: var(--color-surface) !important;
+  border-color:     var(--color-border) !important;
+  color:            var(--color-text) !important;
+}
+
+body.dark-mode .list-group-item:hover {
+  background-color: hsl(222, 20%, 18%) !important;
+}
+
+body.dark-mode .modal-content {
+  background-color: var(--color-surface) !important;
+  color:            var(--color-text) !important;
+  border-color:     var(--color-border) !important;
+}
+
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+  border-color: var(--color-border) !important;
+}
+
+body.dark-mode .form-control {
+  background-color: hsl(222, 20%, 18%) !important;
+  border-color:     var(--color-border) !important;
+  color:            var(--color-text) !important;
+}
+
+body.dark-mode .form-control::placeholder {
+  color: var(--color-text-muted) !important;
+}
+
+body.dark-mode .text-muted {
+  color: var(--color-text-muted) !important;
+}
+
+body.dark-mode .dropdown-menu {
+  background-color: var(--color-surface) !important;
+  border-color:     var(--color-border) !important;
+}
+
+body.dark-mode .dropdown-item {
+  color: var(--color-text) !important;
+}
+
+body.dark-mode .dropdown-item:hover {
+  background-color: hsl(222, 20%, 20%) !important;
+}
+
+body.dark-mode .dropdown-divider {
+  border-color: var(--color-border) !important;
+}
+
+body.dark-mode .navbar .nav-link,
+body.dark-mode .navbar span {
+  color: var(--color-text) !important;
+}
+
+body.dark-mode hr {
+  border-color: var(--color-border) !important;
+}
+
+body.dark-mode #dark-mode-toggle {
+  border-color: var(--color-primary);
+  color:        var(--color-primary);
+}
+
+
+/* ── 6. Save button & View Profile → primary amber ─────────── */
+.card-body .btn-primary,
+.btn-rounded.btn-danger.btn-sm {
+  background-color: var(--color-primary) !important;
+  border-color:     var(--color-primary) !important;
+  color:            var(--color-primary-text) !important;
+}
+.card-body .btn-primary:hover,
+.btn-rounded.btn-danger.btn-sm:hover {
+  background-color: var(--color-primary-dark) !important;
+  border-color:     var(--color-primary-dark) !important;
+}
+
+/* ── 7. Badge utility colours ───────────────────────────────── */
+.badge-primary { background-color: var(--color-primary) !important; color: var(--color-primary-text) !important; }
+.badge-success { background-color: var(--color-success) !important; color: hsl(0,0%,100%) !important; }
+.badge-danger  { background-color: var(--color-danger)  !important; color: hsl(0,0%,100%) !important; }
+.badge-warning { background-color: var(--color-warning) !important; color: hsl(38,30%,12%) !important; }
+.badge-info    { background-color: var(--color-info)    !important; color: hsl(0,0%,100%) !important; }

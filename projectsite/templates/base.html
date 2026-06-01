@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
 	<link rel="stylesheet" href="{% static 'css/ready.css' %}">
 	<link rel="stylesheet" href="{% static 'css/demo.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
 </head>
 <body>
 	<div class="wrapper">
@@ -25,9 +26,15 @@
             <nav class="navbar navbar-header navbar-expand-lg">
 				<div class="container-fluid">
                     <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
+                        <li class="nav-item d-flex align-items-center mr-2">
+                            <button id="dark-mode-toggle" title="Toggle dark mode">
+                                <span class="toggle-icon" id="toggle-icon"><i class="la la-adjust"></i></span>
+                                <span id="toggle-label">Dark</span>
+                            </button>
+                        </li>
                         <li class="nav-item dropdown">
-							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false"> <img src="{% static 'img/profile.jpg' %}" alt="user-img" width="36" class="img-circle"><span >{{request.user.username}}</span></span> </a>
-							<ul class="dropdown-menu dropdown-user">
+                            <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false"> <img src="{% static 'img/profile.jpg' %}" alt="user-img" width="36" class="img-circle"><span >{{request.user.username}}</span></span> </a>
+                            <ul class="dropdown-menu dropdown-user">
                             <li>
                                 <div class="user-box">
                                     <div class="u-img"><img src="{% static 'img/profile.jpg' %}" alt="user"></div>
@@ -104,4 +111,29 @@
 <script src="{% static 'js/plugin/chart-circle/circles.min.js' %}"></script>
 <script src="{% static 'js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
 <script src="{% static 'js/ready.min.js' %}"></script>
+<script>
+  (function () {
+    const body     = document.body;
+    const btn      = document.getElementById('dark-mode-toggle');
+    const icon     = document.getElementById('toggle-icon');
+    const label    = document.getElementById('toggle-label');
+    const STORAGE_KEY = 'hangarin-dark-mode';
+
+    function setDark(isDark) {
+      body.classList.toggle('dark-mode', isDark);
+      icon.innerHTML = isDark ? '<i class="la la-circle"></i>' : '<i class="la la-adjust"></i>';
+      label.textContent = isDark ? 'Light' : 'Dark';
+      localStorage.setItem(STORAGE_KEY, isDark ? '1' : '0');
+    }
+
+    // Restore saved preference on load
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === '1') setDark(true);
+
+    // Button click
+    btn.addEventListener('click', function () {
+      setDark(!body.classList.contains('dark-mode'));
+    });
+  })();
+</script>
 </html>
