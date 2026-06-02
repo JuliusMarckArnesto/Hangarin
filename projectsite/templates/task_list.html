@@ -2,19 +2,21 @@
 <div class="content">
     <div class="content-fluid">
         <h4 class="page-title">Tasks</h4>
-        {% if request.GET.sort_by == 'status' %}
-            {{ task_pending }} Pending | {{ task_inprogress }} In Progress | {{ task_completed }} Completed
-        {% elif request.GET.sort_by == 'priority' %}
-            {{ priority_high }} High | {{ priority_medium }} Medium | {{ priority_low }} Low | {{ priority_optional }} Optional
-        {% elif request.GET.sort_by == 'category' %}
-            {{ category_work }} Work | {{ category_school }} School | {{ category_personal }} Personal | {{ category_optional }} Optional
-        {% elif request.GET.sort_by == 'created' or request.GET.sort_by == '-created' %}
-            {{ total_tasks }} Total | {{ tasks_this_month }} this month | {{ tasks_this_year }} this year
-        {% elif request.GET.sort_by == 'deadline' or request.GET.sort_by == '-deadline' %}
-            {{ total_tasks }} Total | {{ overdue_tasks }} Overdue | {{ due_soon }} Due soon
-        {% else %}
-            {{ total_tasks }} Total | {{ tasks_this_month }} this month | {{ tasks_this_year }} this year
-        {% endif %}
+        <p>
+            {% if request.GET.sort_by == 'status' %}
+                {{ task_pending }} Pending | {{ task_inprogress }} In Progress | {{ task_completed }} Completed
+            {% elif request.GET.sort_by == 'priority' %}
+                {{ priority_high }} High | {{ priority_medium }} Medium | {{ priority_low }} Low | {{ priority_optional }} Optional
+            {% elif request.GET.sort_by == 'category' %}
+                {{ category_work }} Work | {{ category_school }} School | {{ category_personal }} Personal | {{ category_optional }} Optional
+            {% elif request.GET.sort_by == 'created' or request.GET.sort_by == '-created' %}
+                {{ total_tasks }} Total | {{ tasks_this_month }} this month | {{ tasks_this_year }} this year
+            {% elif request.GET.sort_by == 'deadline' or request.GET.sort_by == '-deadline' %}
+                {{ total_tasks }} Total | {{ overdue_tasks }} Overdue | {{ due_soon }} Due soon
+            {% else %}
+                {{ total_tasks }} Total | {{ tasks_this_month }} this month | {{ tasks_this_year }} this year
+            {% endif %}
+        </p>
         <div class="card">
             <!-- add button -->
             <div class="card-header">

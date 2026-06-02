@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     #---TASKS---
+    path('', views.TaskListView.as_view(), name='task-list'), 
     path('tasks/', views.TaskListView.as_view(), name='task-list'), 
     path('tasks/add', views.TaskCreateView.as_view(), name='task-add'),
     path('tasks/<int:pk>', views.TaskUpdateView.as_view(), name='task-update'),

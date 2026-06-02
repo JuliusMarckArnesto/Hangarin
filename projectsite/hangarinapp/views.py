@@ -57,7 +57,7 @@ class TaskListView(LoginRequiredMixin, ListView):
             Task.objects.filter(created_at__month=today.month).count(),
         )
         context['tasks_this_year'] = count[0]
-        context['task_this_month'] = count[1]
+        context['tasks_this_month'] = count[1]
 
         context['task_pending'] = Task.objects.filter(status="Pending").count()
         context['task_inprogress'] = Task.objects.filter(status="In Progress").count()

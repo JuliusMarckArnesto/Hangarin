@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os
+import socket
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -46,19 +47,14 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
 ]
-SITE_ID = 1
 
-LOGIN_REDIRECT = 'task-list'
-LOGIN_URL = 'account_login'
-ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'
-
-ACCOUNT_LOGIN_METHOD = {'username', 'email'}
-ACCOUNT_EMAIL_REQUIRED = False
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-
+if "pythonanywhere" in socket.gethostname():
+    SITE_ID = 1 
+else:
+    SITE_ID = 2
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelsBackend',
+    'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
@@ -143,3 +139,23 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = (
     BASE_DIR / 'static',
 )
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = 'task-list'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
+
+ACCOUNT_LOGIN_METHOD = {'username', 'email'}
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_ON_GET = True
+
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+ACCOUNT_SIGNUP_FIELDS = [
+    "username*", 
+    "email*",
+    "password1*",
+    "password2*",
+]
