@@ -2,42 +2,61 @@
 <div class="content">
     <div class="content-fluid">
         <h4 class="page-title">Tasks</h4>
+        {% if request.GET.sort_by == 'status' %}
+            {{ task_pending }} Pending | {{ task_inprogress }} In Progress | {{ task_completed }} Completed
+        {% elif request.GET.sort_by == 'priority' %}
+            {{ priority_high }} High | {{ priority_medium }} Medium | {{ priority_low }} Low | {{ priority_optional }} Optional
+        {% elif request.GET.sort_by == 'category' %}
+            {{ category_work }} Work | {{ category_school }} School | {{ category_personal }} Personal | {{ category_optional }} Optional
+        {% elif request.GET.sort_by == 'created' or request.GET.sort_by == '-created' %}
+            {{ total_tasks }} Total | {{ tasks_this_month }} this month | {{ tasks_this_year }} this year
+        {% elif request.GET.sort_by == 'deadline' or request.GET.sort_by == '-deadline' %}
+            {{ total_tasks }} Total | {{ overdue_tasks }} Overdue | {{ due_soon }} Due soon
+        {% else %}
+            {{ total_tasks }} Total | {{ tasks_this_month }} this month | {{ tasks_this_year }} this year
+        {% endif %}
         <div class="card">
+            <!-- add button -->
             <div class="card-header">
-                <div class="col-md-12 row"> 
-                <div class="col-md-3"> 
-                    <form class="navbar-left navbar-form nav-search mr-md-3" action=""> 
-                    <div class="input-group"> 
-                        <input type="text" placeholder="Search ..." class="form-control" name="q"/>  
-                        <div class="input-group-append"> 
-                        <span class="input-group-text">  
-                            <i class="la la-search search-icon"></i>  
-                        </span> 
-                        </div>  
-                    </div>  
-                    </form>
-                </div>  
-                <div class="col-md-3">
-                    <form method="get" class="row g-2 align-items-center">
-                        <div class="col-auto">
-                        <label for="smallSelect" class="col-form-label">Sort_by</label>
-                        </div>
-                        <div class="auto-col">
-                        <select name="sort_by" id="smallSelect" class="form-control form-control-sm">
-                            <option value="student__lastname">Student</option>
-                            <option value="date_joined">Date</option>
-                        </select>
-                        </div>
-                        <div class="col-auto">
-                        <button type="submit" class="btn btn-primary btn-sm btn-rounded">Sort</button>
-                        </div>
-                    </form>
+                <div class="d-flex justify-content-end mb-2">
+                    <a href="{% url 'task-add' %}" class="btn btn-success btn-sm">
+                        <i class="la la-plus"></i> Add
+                    </a>
                 </div>
-                <div class="col-md-6">  
-                    <div class="pull-right position-sticky">  
-                        <a href="{%url 'task-add' %}" class="btn btn-success"><i class="la la-plus"> Add </i></a>
+                <!-- search -->
+                <div class="d-flex flex-wrap align-items-center">
+                    <div class="col-md-3"> 
+                        <form class="navbar-left navbar-form nav-search mr-md-3" action="{% url 'task-list' %}"> 
+                        <div class="input-group"> 
+                            <input type="text" placeholder="Search ..." class="form-control" name="q"/>  
+                            <div class="input-group-append"> 
+                                <button type="submit" class="input-group-text btn">  
+                                    <i class="la la-search search-icon"></i>  
+                                </button>
+                            </div>  
+                        </div>  
+                        </form>
                     </div>  
-                </div> 
+                    <!-- Sort -->
+                    <div class="row-md-3">
+                        <div class="col-md-3">
+                            <form method="get" class="d-flex align-items-center">
+                                <label for="smallSelect" class="mb-0 mr-2 text-nowrap">Sort by</label>
+                                <select name="sort_by" id="smallSelect" class="form-control form-control-sm mr-2" style="width: auto;">
+                                    <option value="deadline"  {% if request.GET.sort_by == 'deadline'  %}selected{% endif %}>Deadline (soonest)</option>
+                                    <option value="-deadline" {% if request.GET.sort_by == '-deadline' %}selected{% endif %}>Deadline (latest)</option>
+                                    <option value="title"     {% if request.GET.sort_by == 'title'     %}selected{% endif %}>Title (A-Z)</option>
+                                    <option value="-title"    {% if request.GET.sort_by == '-title'    %}selected{% endif %}>Title (Z-A)</option>
+                                    <option value="status"    {% if request.GET.sort_by == 'status'    %}selected{% endif %}>Status</option>
+                                    <option value="priority"  {% if request.GET.sort_by == 'priority'  %}selected{% endif %}>Priority</option>
+                                    <option value="category"  {% if request.GET.sort_by == 'category'  %}selected{% endif %}>Category</option>
+                                    <option value="-created"  {% if request.GET.sort_by == '-created'  %}selected{% endif %}>Newest first</option>
+                                    <option value="created"   {% if request.GET.sort_by == 'created'   %}selected{% endif %}>Oldest first</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary btn-sm btn-rounded text-nowrap">Sort</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -65,7 +84,7 @@
                             </span>
                         </div>
                     </div>
-                    <p class="mb-1">{{ task.description|truncatechars:100 }}</p>
+                    <p class="mb-1">{{ task.description|truncatechars:95 }}</p>
                     <small class="text-muted">
                         {{ task.deadline|date:"d-M-Y H:i" }}
                         {% now "U" as now_timestamp %}

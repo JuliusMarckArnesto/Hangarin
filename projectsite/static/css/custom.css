@@ -203,7 +203,6 @@ a.text-danger  { color: var(--color-danger)  !important; }
   line-height: 1;
 }
 
-
 /* ── 5. Dark Mode Styles (only active with .dark-mode class) ── */
 
 body.dark-mode {
@@ -230,6 +229,7 @@ body.dark-mode .logo-header {
 body.dark-mode .sidebar,
 body.dark-mode .sidebar-wrapper {
   background-color: var(--color-sidebar-bg) !important;
+  border-right: 1px solid var(--color-border) !important;
 }
 
 body.dark-mode .sidebar .nav > li > a,
