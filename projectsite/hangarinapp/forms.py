@@ -6,7 +6,7 @@ from .models import Task, Note, SubTask, Category, Priority
 class TaskForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Allow saving even when some fields are omitted in the form
+
         optional_fields = ['description', 'deadline', 'category', 'priority']
         for name in optional_fields:
             if name in self.fields:
@@ -14,6 +14,7 @@ class TaskForm(ModelForm):
 
     class Meta:
         model = Task
+        exclude = ['user']
         fields = "__all__"
         widgets = {
             'title': TextInput(attrs={
@@ -59,16 +60,21 @@ class TaskForm(ModelForm):
     
 class NoteForm(ModelForm):
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        # Allow saving even when some fields are omitted in the form
+
         optional_fields = ['task', 'content']
         for name in optional_fields:
             if name in self.fields:
                 self.fields[name].required = False
+
+        if user is not None:
+            self.fields['task'].queryset = Task.objects.filter(user=user)
     
     class Meta:
         model = Note
         fields = "__all__" 
+        exclude = ['user']
         widgets = {
             'task': Select(attrs={
                 'class': 'form-control'
@@ -81,9 +87,17 @@ class NoteForm(ModelForm):
         }
 
 class SubTaskForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        if user is not None:
+            self.fields['parent_task'].queryset = Task.objects.filter(user=user)
+ 
     class Meta:
         model = SubTask
         fields = "__all__"
+        exclude = ['user']
         widgets = {
             'parent_task': Select(attrs={
                 'class': 'form-control'

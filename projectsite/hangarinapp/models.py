@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
@@ -28,6 +29,8 @@ class Priority(BaseModel):
         return self.priority_level
     
 class Task(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+
     title = models.CharField(max_length=150)
     description = models.TextField()
     deadline = models.DateTimeField()
@@ -46,6 +49,7 @@ class Task(BaseModel):
         return self.title
     
 class SubTask(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     parent_task = models.ForeignKey(Task, on_delete=models.CASCADE)
     subtask_title = models.CharField(max_length=150)
     subtask_status = models.CharField(
@@ -60,6 +64,7 @@ class SubTask(BaseModel):
     def __str__(self):
         return self.subtask_title
 class Note(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     content = models.TextField()
 

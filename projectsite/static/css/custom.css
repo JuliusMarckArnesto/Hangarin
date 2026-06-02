@@ -194,7 +194,16 @@ a.text-danger  { color: var(--color-danger)  !important; }
   cursor:          pointer;
   transition:      background 0.2s, color 0.2s;
 }
-#dark-mode-toggle:hover {body.dark-mode .subtask-progress {
+#dark-mode-toggle:hover {
+  background:  var(--color-primary);
+  color:       var(--color-text);
+}
+#dark-mode-toggle .toggle-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+body.dark-mode .subtask-progress {
   background-color: hsl(38, 92%, 24%) !important;
   border-left-color: hsl(38, 92%, 50%) !important;
   color: var(--color-text) !important;
@@ -202,13 +211,6 @@ a.text-danger  { color: var(--color-danger)  !important; }
 
 body.dark-mode .subtask-progress span {
   color: var(--color-text) !important;
-}
-  background:  var(--color-primary);
-  color:       var(--color-text);
-}
-#dark-mode-toggle .toggle-icon {
-  font-size: 1rem;
-  line-height: 1;
 }
 
 /* ── 5. Dark Mode Styles (only active with .dark-mode class) ── */

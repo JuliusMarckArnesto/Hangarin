@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" /> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css" /> 
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
  
     <style> 
       body { 
@@ -17,16 +18,36 @@
         align-items: center; 
         justify-content: center; 
         height: 100vh; 
-        background-color: #f8f9fc; 
+        background-color: var; 
       } 
       .auth-card { 
         max-width: 600px; 
         width: 100%; 
-        background: #fff; 
+        background: var(--color-surface); 
         border-radius: 12px; 
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
-        padding: 2rem; 
+        padding: 2rem;
       } 
+      .nav-pills .nav-link.active, 
+      .nav-pills .show > .nav-link {
+        background-color: var(--color-primary) !important;
+        color: var(--color-primary-text) !important;
+      }
+
+      .nav-pills .nav-link {
+        color: var(--color-text) !important;
+      }
+
+      .form-outline .form-control:focus ~ .form-label {
+        color: var(--color-primary) !important;
+      }
+
+      .form-outline .form-control:focus {
+        border-color: var(--color-primary) !important;
+        box-shadow: 0 1px 0 0 var(--color-primary) !important;
+      }
+      .badge-info { background-color: hsl(38, 92%, 50%) !important; }
+      .text-info { color: hsl(38, 92%, 50%) !important; }
     </style> 
   </head> 
   <body> 
