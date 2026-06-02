@@ -71,17 +71,6 @@ register" aria-selected="false">Register</a>
         <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login"> 
           <form method="post" action="{% url 'account_login' %}"> 
             {% csrf_token %} 
-            <div class="text-center mb-3"> 
-              <p>Sign in with:</p> 
-              <a href="{% provider_login_url 'google' %}" class="btn btn-link btn-floating mx-1"> 
-                <i class="fab fa-google"></i> 
-              </a> 
-              <a href="{% provider_login_url 'github' %}" class="btn btn-link btn-floating mx-1"> 
-                <i class="fab fa-github"></i> 
-              </a> 
-            </div> 
- 
-            <p class="text-center">or:</p> 
  
             <!-- Username / Email --> 
             <div data-mdb-input-init class="form-outline mb-4"> 
@@ -117,6 +106,19 @@ register" aria-selected="false">Register</a>
  
             <!-- Submit button --> 
             <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button> 
+
+            <p class="text-center">or:</p>
+
+            <div class="text-center mb-3"> 
+              <p>Sign in with:</p> 
+              <a href="{% provider_login_url 'google' %}" class="btn btn-link btn-floating mx-1"> 
+                <i class="fab fa-google"></i> 
+              </a> 
+              <a href="{% provider_login_url 'github' %}" class="btn btn-link btn-floating mx-1"> 
+                <i class="fab fa-github"></i> 
+              </a> 
+            </div>  
+
           </form> 
         </div> 
  
@@ -124,17 +126,6 @@ register" aria-selected="false">Register</a>
         <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="tab-register"> 
           <form method="post" action="{% url 'account_signup' %}"> 
             {% csrf_token %} 
-            <div class="text-center mb-3"> 
-              <p>Sign up with:</p> 
-              <a href="{% provider_login_url 'google' %}" class="btn btn-link btn-floating mx-1"> 
-                <i class="fab fa-google"></i> 
-              </a> 
-              <a href="{% provider_login_url 'github' %}" class="btn btn-link btn-floating mx-1"> 
-                <i class="fab fa-github"></i> 
-              </a> 
-            </div> 
- 
-            <p class="text-center">or:</p> 
  
             <!-- Username --> 
             <div data-mdb-input-init class="form-outline mb-4"> 
@@ -163,6 +154,20 @@ register" aria-selected="false">Register</a>
  
             <!-- Submit --> 
             <button type="submit" class="btn btn-primary btn-block mb-3">Register</button> 
+
+                        
+            <p class="text-center">or:</p> 
+
+            <div class="text-center mb-3"> 
+              <p>Sign up with:</p> 
+              <a href="{% provider_login_url 'google' %}" class="btn btn-link btn-floating mx-1"> 
+                <i class="fab fa-google"></i> 
+              </a> 
+              <a href="{% provider_login_url 'github' %}" class="btn btn-link btn-floating mx-1"> 
+                <i class="fab fa-github"></i> 
+              </a> 
+            </div> 
+            
           </form> 
         </div> 
       </div> 
