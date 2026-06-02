@@ -15,15 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from hangarinapp.views import TaskListView, TaskCreateView
 from hangarinapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/', include('allauth.urls')),
     #---TASKS---
-    path('', views.TaskListView.as_view(), name='task-list'),
-    path('tasks/', views.TaskListView.as_view(), name='task-list'), #Redundant ba to?
+    path('tasks/', views.TaskListView.as_view(), name='task-list'), 
     path('tasks/add', views.TaskCreateView.as_view(), name='task-add'),
     path('tasks/<int:pk>', views.TaskUpdateView.as_view(), name='task-update'),
     path('tasks/<int:pk>/delete', views.TaskDeleteView.as_view(), name='task-delete'),
@@ -37,5 +37,5 @@ urlpatterns = [
     path('subtask/<int:pk>', views.SubTaskUpdateView.as_view(), name='subtask-update'),
     path('subtask/<int:pk>/delete', views.SubTaskDeleteView.as_view(), name='subtask-delete'),
     #---MODALS---
-    path('subtask/<int:pk>/toggle', views.SubTaskToggleView.as_view(), name='subtask-toggle'),
+    path('subtask/<int:pk>/toggle', views.SubTaskToggleView.as_view(), name='subtask-toggle'),    
 ]

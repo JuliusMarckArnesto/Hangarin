@@ -8,8 +8,9 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views import View
 from django.db.models import Q
 from django.utils import timezone
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-class TaskListView(ListView):
+class TaskListView(LoginRequiredMixin, ListView):
     model = Task
     context_object_name = 'tasklist'
     template_name = 'task_list.html'
@@ -76,25 +77,25 @@ class TaskListView(ListView):
         context['due_soon'] = Task.objects.filter(deadline__range=(today, today + timezone.timedelta(hours=24))).exclude(status='Completed').count()
         return context
 
-class TaskCreateView(CreateView):
+class TaskCreateView(LoginRequiredMixin, CreateView):
     model = Task
     form_class = TaskForm
     template_name = 'task_form.html'
     success_url = reverse_lazy('task-list')
 
-class TaskUpdateView(UpdateView):
+class TaskUpdateView(LoginRequiredMixin, UpdateView):
     model = Task
     form_class = TaskForm
     template_name = "task_form.html"
     success_url = reverse_lazy('task-list')
 
-class TaskDeleteView(DeleteView):
+class TaskDeleteView(LoginRequiredMixin, DeleteView):
     model = Task
     template_name = 'task_delete.html'
     success_url = reverse_lazy('task-list')
 
 #---- NOTES ----
-class NoteListView(ListView):
+class NoteListView(LoginRequiredMixin, ListView):
     model = Note
     context_object_name = "notelist"
     template_name = "note_list.html"
@@ -139,7 +140,7 @@ class NoteListView(ListView):
         context['notes_this_month'] = count[1]
         return context
 
-class NoteNoteTaskModal(ListView):
+class NoteNoteTaskModal(LoginRequiredMixin, ListView):
     model = Note
     context_object_name = "notetasklist"
     template_name = "task_list.html"
@@ -154,7 +155,7 @@ class NoteCreateView(CreateView):
         source = self.request.POST.get('source', 'note-list')
         return reverse_lazy(source)
 
-class NoteUpdateView(UpdateView):
+class NoteUpdateView(LoginRequiredMixin,UpdateView):
     model = Note
     form_class = NoteForm
     template_name = "note_form.html"
@@ -163,7 +164,7 @@ class NoteUpdateView(UpdateView):
         source = self.request.POST.get('source', 'note-list')
         return reverse_lazy(source)
 
-class NoteDeleteView(DeleteView):
+class NoteDeleteView(LoginRequiredMixin, DeleteView):
     model = Note
     template_name = 'note_delete.html'
     
@@ -171,7 +172,7 @@ class NoteDeleteView(DeleteView):
         source = self.request.POST.get('source', 'note-list')
         return reverse_lazy(source)
 
-class SubTaskCreateView(CreateView):
+class SubTaskCreateView(LoginRequiredMixin, CreateView):
     model = SubTask
     form_class = SubTaskForm
     template_name = 'subtask_form.html'
@@ -187,7 +188,7 @@ class SubTaskCreateView(CreateView):
         source = self.request.POST.get('source', 'task-list')
         return reverse_lazy(source)
 
-class SubTaskUpdateView(UpdateView):
+class SubTaskUpdateView(LoginRequiredMixin, UpdateView):
     model = SubTask
     form_class = SubTaskForm
     template_name = "subtask_form.html"
@@ -196,7 +197,7 @@ class SubTaskUpdateView(UpdateView):
         source = self.request.POST.get('source', 'task-list')
         return reverse_lazy(source)
 
-class SubTaskDeleteView(DeleteView):
+class SubTaskDeleteView(LoginRequiredMixin, DeleteView):
     model = SubTask
     template_name = 'subtask_delete.html'
 
@@ -204,7 +205,7 @@ class SubTaskDeleteView(DeleteView):
         source = self.request.POST.get('source', 'task-list')
         return reverse_lazy(source)
 
-class SubTaskToggleView(View):
+class SubTaskToggleView(LoginRequiredMixin, View):
     def post(self, request, pk):
         subtask = get_object_or_404(SubTask, pk=pk)
         if subtask.subtask_status == "Completed":
