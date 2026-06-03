@@ -24,16 +24,20 @@
 <!-- Replace with actual screenshots -->
 
 #### Large Screes
-Front page
+Front page\
 ![App Preview](projectsite/static/img/screenshots/front_page.png)
 ![App Preview](projectsite/static/img/screenshots/modal_pc.png)
 
+
 Phone Screen
+
 ![App Preview](projectsite/static/img/screenshots/front_page_phone.png)
 ![App Preview](projectsite/static/img/screenshots/modal.png)
 
+
 Dark mode
-![App Preview](projectsite/static/img/screenshots/front_page_dark_.png)
+
+![App Preview](projectsite/static/img/screenshots/front_page_dark.png)
 ![App Preview](projectsite/static/img/screenshots/front_page_dark_phone.png)
 
 
