@@ -18,10 +18,12 @@ from django.contrib import admin
 from django.urls import include, path
 from hangarinapp.views import TaskListView, TaskCreateView
 from hangarinapp import views
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
+    path('', include('pwa.urls')),
     #---TASKS---
     path('', views.TaskListView.as_view(), name='task-list'), 
     path('tasks/', views.TaskListView.as_view(), name='task-list'), 

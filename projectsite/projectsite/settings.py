@@ -46,12 +46,13 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
+    'pwa',
 ]
 
 if "pythonanywhere" in socket.gethostname():
-    SITE_ID = 1 
-else:
     SITE_ID = 2
+else:
+    SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -159,3 +160,26 @@ ACCOUNT_SIGNUP_FIELDS = [
     "password1*",
     "password2*",
 ]
+
+PWA_APP_NAME = "Hangarin"
+PWA_APP_DESCRIPTION = "A Progressive Web App version of ProjectSite"
+PWA_APP_THEME_COLOR = "#0A0A0A"
+PWA_APP_BACKGROUND_COLOR = "#FFFFFF"
+PWA_APP_DISPLAY = "standalone"
+PWA_APP_SCOPE = "/"
+PWA_APP_ORIENTATION = "portrait"
+PWA_APP_START_URL = "/"
+PWA_APP_STATUS_BAR_COLOR = "default"
+
+PWA_APP_ICONS = [
+    {"src": "/static/img/logo/logo3.png", "sizes": "192x192"},
+    {"src": "/static/img/logo/logo2.png", "sizes": "512x512"},
+]
+
+PWA_APP_ICONS_APPLE = [
+    {"src": "/static/img/logo/logo6.png", "sizes": "192x192"},
+    {"src": "/static/img/logo/logo4.png", "sizes": "512x512"},
+]
+
+PWA_APP_DIR = "ltr"
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, "static/js", "serviceworker.js")
